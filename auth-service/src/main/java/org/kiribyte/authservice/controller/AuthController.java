@@ -1,65 +1,42 @@
 package org.kiribyte.authservice.controller;
 
-import org.kiribyte.authservice.dto.LoginDto;
-import org.kiribyte.authservice.dto.UserRegisterDto;
+import org.kiribyte.authservice.dto.RefreshTokenRequest;
 import org.kiribyte.authservice.dto.TokensDto;
-import org.kiribyte.authservice.entity.User;
-import org.kiribyte.authservice.service.impl.TokenServiceImpl;
-import org.kiribyte.authservice.service.impl.UserServiceImpl;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.kiribyte.authservice.service.impl.AuthServiceImpl;
+import org.kiribyte.dto.UserLoginDto;
+import org.kiribyte.dto.UserRegisterDto;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    private final UserServiceImpl userService;
-    private final TokenServiceImpl tokenService;
+    private final AuthServiceImpl authService;
 
-    public AuthController(UserServiceImpl userService, TokenServiceImpl tokenService) {
-        this.userService = userService;
-        this.tokenService = tokenService;
+    public AuthController(AuthServiceImpl authService) {
+        this.authService = authService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "test";
-    }
 
     @PostMapping("/login")
-    public TokensDto login(@RequestBody LoginDto loginDto) {
+    public TokensDto login(@RequestBody UserLoginDto loginDto) {
 
-        if (loginDto.getUsername() == null || loginDto.getPassword() == null) {
-            throw new IllegalArgumentException("Username and password are required");
-        }
+        return authService.login(loginDto);
 
-        User user = userService.getByLogin(loginDto.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-//        if (!user.checkPassword(loginDto.getPassword())) {
-//            throw new BadCredentialsException("Invalid password");
-//        }
-
-        String accessToken = tokenService.generateAccessToken(user);
-        String refreshToken = tokenService.generateRefreshToken(user);
-
-        return new TokensDto(accessToken, refreshToken);
     }
 
     @PostMapping("/register")
     public TokensDto register(@RequestBody UserRegisterDto userRegisterDto) {
-
-        return new TokensDto();
+        return authService.register(userRegisterDto);
     }
 
     @PostMapping("/logout")
-    public void logout() {
-
+    public void logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        authService.logout(refreshTokenRequest);
     }
 
     @PostMapping("/refresh")
-    public TokensDto refresh(@RequestBody String refreshToken) {
-
-        return new TokensDto();
+    public TokensDto refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authService.refresh(refreshTokenRequest);
     }
 }

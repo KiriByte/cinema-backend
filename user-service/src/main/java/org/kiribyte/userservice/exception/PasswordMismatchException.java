@@ -4,4 +4,8 @@ public class PasswordMismatchException extends UserException {
     public PasswordMismatchException() {
         super("Password and confirmation password do not match");
     }
+
+    public PasswordMismatchException(String message) {
+        super(message);
+    }
 }

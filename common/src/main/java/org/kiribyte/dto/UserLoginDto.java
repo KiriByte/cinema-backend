@@ -1,4 +1,4 @@
-package org.kiribyte.authservice.dto;
+package org.kiribyte.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
-    private String username;
+public class UserLoginDto {
+    private String email;
     private String password;
 }

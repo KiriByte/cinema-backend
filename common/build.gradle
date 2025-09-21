@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'org.kiribyte'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+jar{
+    enabled = true
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.40")
+    annotationProcessor("org.projectlombok:lombok:1.18.40")
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'org.kiribyte'
+            artifactId = 'cinema-common'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+}

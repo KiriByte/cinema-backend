@@ -1,7 +1,8 @@
 package org.kiribyte.userservice.mapper;
 
-import org.kiribyte.userservice.dto.UserDto;
-import org.kiribyte.userservice.dto.UserRegisterDto;
+import org.kiribyte.dto.UserDto;
+import org.kiribyte.dto.UserRegisterDto;
+import org.kiribyte.dto.UserWithRolesDto;
 import org.kiribyte.userservice.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,6 +14,10 @@ public interface UserMapper {
 
     // User -> UserDto
     UserDto toUserDto(User user);
+
+    // User -> UserWithRolesDto
+    @Mapping(target = "roles", ignore = true)
+    UserWithRolesDto toUserWithRolesDto(User user);
 
     // UserDto -> User
     //@Mapping(target = "id", ignore = true)

@@ -1,16 +1,22 @@
-package org.kiribyte.userservice.dto;
+package org.kiribyte.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterDto {
+public class UserWithRolesDto {
+
+    private Long id;
     private String email;
-    private String password;
-    private String confirmPassword;
+    private String firstName;
+    private String lastName;
+    private Set<String> roles;
+
 }
