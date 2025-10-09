@@ -11,32 +11,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-//    @ExceptionHandler({UsernameNotFoundException.class, BadCredentialsException.class})
-//    public ResponseEntity<Object> handleAuthException(Exception ex) {
-//        return ResponseEntity
-//                .status(HttpStatus.UNAUTHORIZED)
-//                .body(ex.getMessage());
-//    }
-
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<Object> handleBadRequest(Exception ex) {
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(ex.getMessage());
-//    }
-
     @ExceptionHandler(FeignClientException.class)
     public ResponseEntity<ErrorResponse> handleFeignClientException(FeignClientException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                ex.getErrorCode(),
+                ex.getCode(),
+                ex.getError(),
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getStatusCode()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getCode()));
     }
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<ErrorResponse> expiredTokenException(TokenExpiredException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                403,
                 "TOKEN_EXPIRED",
                 ex.getMessage()
         );
@@ -46,6 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenValidationException.class)
     public ResponseEntity<ErrorResponse> expiredTokenException(TokenValidationException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                401,
                 "TOKEN_INVALID",
                 ex.getMessage()
         );
@@ -55,6 +44,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                500,
                 "INTERNAL_SERVER_ERROR",
                 ex.getMessage()
         );

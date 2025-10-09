@@ -17,12 +17,9 @@ public class AuthController {
         this.authService = authService;
     }
 
-
     @PostMapping("/login")
     public TokensDto login(@RequestBody UserLoginDto loginDto) {
-
         return authService.login(loginDto);
-
     }
 
     @PostMapping("/register")

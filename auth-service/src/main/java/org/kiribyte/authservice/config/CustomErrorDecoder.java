@@ -27,16 +27,16 @@ public class CustomErrorDecoder implements ErrorDecoder {
         try (InputStream inputStream = response.body().asInputStream()) {
             ErrorResponse errorResponse = objectMapper.readValue(inputStream, ErrorResponse.class);
             return new FeignClientException(
-                    errorResponse.getErrorCode(),
-                    errorResponse.getMessage(),
-                    response.status()
+                    errorResponse.getCode(),
+                    errorResponse.getError(),
+                    errorResponse.getMessage()
             );
 
         } catch (IOException e) {
             return new FeignClientException(
+                    500,
                     "DECODING_ERROR",
-                    "Failed to decode error response: " + e.getMessage(),
-                    response.status());
+                    "Failed to decode error response");
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.kiribyte.userservice.model;
+package org.kiribyte.userservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

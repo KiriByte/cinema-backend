@@ -3,7 +3,7 @@ package org.kiribyte.userservice.mapper;
 import org.kiribyte.dto.UserDto;
 import org.kiribyte.dto.UserRegisterDto;
 import org.kiribyte.dto.UserWithRolesDto;
-import org.kiribyte.userservice.model.User;
+import org.kiribyte.userservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                404,
                 "USER_NOT_FOUND",
                 ex.getMessage()
         );
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                409,
                 "USER_ALREADY_EXISTS",
                 ex.getMessage()
         );
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ErrorResponse> handlePasswordMismatch(PasswordMismatchException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                400,
                 "PASSWORD_MISMATCH",
                 ex.getMessage()
         );
@@ -42,6 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                400,
                 "INVALID_CREDENTIALS",
                 ex.getMessage()
         );
@@ -51,6 +55,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorResponse> handleUserException(UserException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
+                400,
                 "USER_EXCEPTION",
                 ex.getMessage()
         );
@@ -61,16 +66,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRoleNotFound(RoleNotFoundException ex) {
         log.error("Role not found. Check database.", ex);
         ErrorResponse errorResponse = new ErrorResponse(
+                404,
                 "ROLE_NOT_FOUND",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllException(Exception ex) {
         log.error("INTERNAL_SERVER_ERROR", ex);
         ErrorResponse errorResponse = new ErrorResponse(
+                500,
                 "INTERNAL_SERVER_ERROR",
                 "An unexpected internal server error occurred."
         );
