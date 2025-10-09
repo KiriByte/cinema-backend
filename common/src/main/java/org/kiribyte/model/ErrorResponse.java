@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {
-    private String errorCode;
+    private Integer code;
+    private String error;
     private String message;
     private LocalDateTime timestamp;
 
-    public ErrorResponse(String errorCode, String message) {
-        this.errorCode = errorCode;
+    public ErrorResponse(Integer code, String error, String message) {
+        this.code = code;
+        this.error = error;
         this.message = message;
         this.timestamp = LocalDateTime.now();
     }
