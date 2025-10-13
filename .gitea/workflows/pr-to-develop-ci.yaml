@@ -2,7 +2,7 @@ name: CI on Pull Request to Develop
 on:
   pull_request:
     branches:
-      - [ develop ]
+      - develop
 jobs:
   test:
     name: Runs Tests and Build
