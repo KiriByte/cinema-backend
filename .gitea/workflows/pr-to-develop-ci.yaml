@@ -37,6 +37,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.0
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Debug information
         run: |
           echo "Current directory: $(pwd)"
@@ -45,23 +48,17 @@ jobs:
           echo "Java version:"
           java -version
           echo "Gradle version:"
-          gradle --version || echo "Gradle not available"
+          ./gradlew --version || echo "Gradle not available"
 
       - name: Run tests with Gradle
-        run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x ./gradlew
-            ./gradlew test
-          else
-            gradle test
-          fi
+        run: ./gradlew test --no-daemon
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
           SPRING_DATASOURCE_USERNAME: testuser
           SPRING_DATASOURCE_PASSWORD: testpass
 
       - name: Build JAR
-        run: ./gradlew botJar -x test
+        run: ./gradlew bootJar -x test
 
       - name: Build Docker image
         run: |
