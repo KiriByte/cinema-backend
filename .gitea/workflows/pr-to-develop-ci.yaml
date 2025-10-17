@@ -3,9 +3,49 @@ on:
   pull_request:
     branches:
       - develop
+
+permissions:
+  pull-requests: read
+  contents: read
+
 jobs:
-  test:
-    name: Runs Tests and Build
+  detect-changed-modules:
+    name: Detect Changed Modules
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed modules
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            auth-service:
+              - 'auth-service/**'
+            hall-service:
+              - 'hall-service/**'
+            movie-service:
+              - 'movie-service/**'
+            user-service:
+              - 'user-service/**'
+            common:
+              - 'common/**'
+            root-config:
+              - 'build.gradle'
+              - 'settings.gradle'
+              - 'gradle.properties'
+              - 'gradlew'
+
+  test-changed-modules:
+    name: Test Changed Modules
+    needs: detect-changed-modules
+    if: needs.detect-changed-modules.outputs.modules != '[]'
+    #if: always()
     runs-on: ubuntu-latest
 
     services:
@@ -22,6 +62,9 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+    strategy:
+      matrix:
+        module: ${{ fromJSON(needs.detect-changed-modules.outputs.modules) }}
 
     steps:
       - name: Checkout code
@@ -34,12 +77,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4.4.4
+        uses: gradle/actions/setup-gradle@v5
         with:
-          gradle-version: '8.5'
+          gradle-version: wrapper
 
       - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        run: |
+          gradle wrapper
+          chmod +x ./gradlew
 
       - name: Debug information
         run: |
@@ -51,24 +96,9 @@ jobs:
           echo "Gradle version:"
           ./gradlew --version || echo "Gradle not available"
 
-      - name: Run tests with Gradle
-        run: ./gradlew test --no-daemon
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
-          SPRING_DATASOURCE_USERNAME: testuser
-          SPRING_DATASOURCE_PASSWORD: testpass
+      - name: Build common module
+        if: matrix.module != 'common'
+        run: ./gradlew :common:build :common:publishToMavenLocal
 
-      - name: Build JAR
-        run: ./gradlew bootJar -x test
-
-      - name: Build Docker image
-        run: |
-          docker build -t my-spring-app:${{ github.sha }} .
-          docker images my-spring-app:${{ github.sha }}
-
-      - name: Test Docker image
-        run: |
-          docker run --rm -d --name test-container -p 8080:8080 my-spring-app:${{ github.sha }}
-          sleep 30
-          curl -f http://localhost:8080/actuator/health || echo "Health check failed but continuing"
-          docker stop test-container
+      - name: Build and test ${{ matrix.module }}
+        run: ./gradlew :${{ matrix.module }}:build :${{ matrix.module }}:test --no-daemon
