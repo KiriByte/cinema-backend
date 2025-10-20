@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS user_service_schema;
 CREATE TABLE IF NOT EXISTS user_service_schema.app_users
 (
     user_id    BIGSERIAL PRIMARY KEY,
