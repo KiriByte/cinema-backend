@@ -1,23 +1,11 @@
 server:
-  port: 8082
+  port: 8080
 
 spring:
   application:
     name: user-service
-  datasource:
-    url: jdbc:postgresql://192.168.1.14:5432/cinema_project
-    username: postgres
-    password: 76sqon9Z
   flyway:
     enabled: true
     locations: classpath:db/migration/user
     default-schema: user_service_schema
     schemas: user_service_schema
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
-

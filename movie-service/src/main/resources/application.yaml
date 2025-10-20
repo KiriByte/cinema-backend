@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: movie-service
+  flyway:
+    enabled: true
+    locations: classpath:db/migration/movie
+    default-schema: movie_service_schema
+    schemas: movie_service_schema

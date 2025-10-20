@@ -18,11 +18,3 @@ spring:
               predicates:
                 - Path=/api/v1/halls/**
 
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
-

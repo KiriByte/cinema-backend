@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS auth_service_schema;
 CREATE TABLE IF NOT EXISTS auth_service_schema.refresh_tokens
 (
     token_id   BIGSERIAL PRIMARY KEY,
