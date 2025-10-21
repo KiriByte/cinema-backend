@@ -29,7 +29,6 @@ public class AuthServiceImpl {
     public TokensDto login(UserLoginDto userLoginDto) {
         UserWithRolesDto userWithRolesDto = userClient.verifyCredentials(userLoginDto);
         TokensDto tokens = getTokens(userWithRolesDto);
-        /// ///////////////////////////
         String refreshToken = tokens.getRefreshToken();
         TokenEntity tokenEntity = tokenRepository.findByUserId(userWithRolesDto.getId())
                 .orElse(new TokenEntity());
