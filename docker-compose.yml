@@ -78,7 +78,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinema_db
       - SPRING_DATASOURCE_USERNAME=cinema_user
       - SPRING_DATASOURCE_PASSWORD=cinema_password
-      - JWT_SECRET=cinema-jwt-secret-key-for-docker-environment
+      - JWT_SECRET=mysupersecretkeyforjwtmysupersecretkeyforjwtmysupersecretkeyforjwt
       - JWT_ACCESS_TOKEN_EXPIRATION_MINUTES=30
       - JWT_REFRESH_TOKEN_EXPIRATION_DAYS=7
     networks:
