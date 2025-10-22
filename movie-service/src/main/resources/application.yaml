@@ -6,6 +6,12 @@ spring:
     name: movie-service
   flyway:
     enabled: true
-    locations: classpath:db/migration/movie
+    locations: classpath:db/migration/movies
     default-schema: movie_service_schema
     schemas: movie_service_schema
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      file-size-threshold: 3MB
+      resolve-lazily: false

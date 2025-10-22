@@ -13,3 +13,13 @@ eureka:
       defaultZone: ${EUREKA_CLIENT_SERVICE_URL}
   instance:
     prefer-ip-address: true
+
+minio:
+  config:
+    endpoint: ${MINIO_ENDPOINT:http://minio:9000}
+    login: ${MINIO_LOGIN:minioadmin}
+    password: ${MINIO_PASSWORD:minioadmin123}
+  buckets:
+    posters:
+      name: poster-storage
+      url-expiration-hours: 24
