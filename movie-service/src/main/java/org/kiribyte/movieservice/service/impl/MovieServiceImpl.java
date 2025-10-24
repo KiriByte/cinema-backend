@@ -35,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieResponse> getAllMovies() {
-        List<MovieEntity> allMovies = movieRepository.findAll();
+        List<MovieEntity> allMovies = movieRepository.findAllByOrderByCreatedAtDesc();
         List<MovieResponse> movieResponses = new ArrayList<>();
         for (MovieEntity movieEntity : allMovies) {
             var movieResponse = movieMapper.toResponse(movieEntity);

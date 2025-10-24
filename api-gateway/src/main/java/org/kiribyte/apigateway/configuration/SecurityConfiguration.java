@@ -21,6 +21,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/auth/security").authenticated()
                         .requestMatchers("/security").authenticated()
                         .requestMatchers("/api/v1/halls/**").permitAll()
+                        .requestMatchers("/api/v1/movies/**").permitAll()
                         .anyRequest().authenticated())
 
                 .csrf(AbstractHttpConfigurer::disable)
