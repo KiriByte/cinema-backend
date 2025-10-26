@@ -1,0 +1,2 @@
+ALTER TABLE movie_service_schema.movies
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

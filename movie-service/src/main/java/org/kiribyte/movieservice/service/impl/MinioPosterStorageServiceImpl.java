@@ -5,22 +5,18 @@ import io.minio.http.Method;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.kiribyte.movieservice.exception.*;
-import org.kiribyte.movieservice.service.ImageStorageService;
+import org.kiribyte.movieservice.service.MinioStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.time.Duration;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class MinioPosterStorageServiceImpl implements ImageStorageService {
-
-
-    private final MinioClient minioClient;
+public class MinioPosterStorageServiceImpl implements MinioStorageService {
 
     @Value("${minio.buckets.posters.name}")
     private String bucketName;
@@ -35,6 +31,7 @@ public class MinioPosterStorageServiceImpl implements ImageStorageService {
             "image/jpeg", "image/png"
     );
 
+    private final MinioClient minioClient;
     public MinioPosterStorageServiceImpl(MinioClient minioClient) {
         this.minioClient = minioClient;
     }
@@ -91,11 +88,23 @@ public class MinioPosterStorageServiceImpl implements ImageStorageService {
 
     @Override
     public String getFileUrl(String fileName) {
-        return getPresignedUrl(fileName, Duration.ofHours(expirationHours));
+        return getPresignedUrl(fileName);
     }
 
     @Override
-    public String getPresignedUrl(String fileName, Duration expiration) {
+    public void delete(String fileName) {
+        try {
+            minioClient.removeObject(RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(fileName)
+                    .build());
+        } catch (Exception e) {
+            log.error("Failed to delete file {} from MinIO", fileName, e);
+            throw new FileDeleteException("Failed to delete file: " + fileName, e);
+        }
+    }
+
+    private String getPresignedUrl(String fileName) {
         try {
             return minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
@@ -107,7 +116,7 @@ public class MinioPosterStorageServiceImpl implements ImageStorageService {
             );
         } catch (Exception e) {
             log.error("Failed generate url for file {}", fileName, e);
-            throw new UrlGenerationException("Failed to generate URL for file: " + fileName, e);
+            return  null;
         }
 
     }

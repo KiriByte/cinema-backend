@@ -1,5 +1,5 @@
 package org.kiribyte.movieservice.service;
 
-public interface ImageStorageService extends FileStorageService, UrlAccessibleStorage {
+public interface ImageStorageService extends FileStorageService {
 
 }

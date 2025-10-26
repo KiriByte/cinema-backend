@@ -1,0 +1,8 @@
+services:
+
+  # Movie Service
+  movie-service:
+    environment:
+      MINIO_ENDPOINT: http://192.168.1.10:9000
+      MINIO_LOGIN: kiribyte
+      MINIO_PASSWORD: 76sqon9Z

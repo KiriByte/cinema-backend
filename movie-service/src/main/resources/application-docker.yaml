@@ -17,9 +17,13 @@ eureka:
 minio:
   config:
     endpoint: ${MINIO_ENDPOINT:http://minio:9000}
+    external-endpoint: ${MINIO_EXTERNAL_ENDPOINT:http://localhost:9000}
     login: ${MINIO_LOGIN:minioadmin}
-    password: ${MINIO_PASSWORD:minioadmin123}
+    password: ${MINIO_PASSWORD:minioadmin}
   buckets:
     posters:
       name: poster-storage
       url-expiration-hours: 24
+
+
+

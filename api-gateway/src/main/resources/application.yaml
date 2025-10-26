@@ -16,5 +16,9 @@ spring:
             - id: hall-service
               uri: lb://hall-service
               predicates:
-                - Path=/api/v1/halls/**
+                - Path=/api/v1/halls/**, /api/v1/seats/**, /api/v1/seat-types/**
+            - id: movie-service
+              uri: lb://movie-service
+              predicates:
+                - Path=/api/v1/movies/**
 

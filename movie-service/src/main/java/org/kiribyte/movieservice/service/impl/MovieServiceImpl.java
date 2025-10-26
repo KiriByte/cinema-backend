@@ -1,6 +1,7 @@
 package org.kiribyte.movieservice.service.impl;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.kiribyte.movieservice.dto.AddMovieRequest;
 import org.kiribyte.movieservice.dto.MovieResponse;
 import org.kiribyte.movieservice.entity.MovieEntity;
@@ -9,7 +10,7 @@ import org.kiribyte.movieservice.exception.MovieAlreadyExistsException;
 import org.kiribyte.movieservice.exception.MovieNotFoundException;
 import org.kiribyte.movieservice.mapper.MovieMapper;
 import org.kiribyte.movieservice.repository.MovieRepostiory;
-import org.kiribyte.movieservice.service.ImageStorageService;
+import org.kiribyte.movieservice.service.MinioStorageService;
 import org.kiribyte.movieservice.service.MovieService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,16 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class MovieServiceImpl implements MovieService {
 
     private final MovieMapper movieMapper;
     private final MovieRepostiory movieRepository;
-    private final ImageStorageService posterStorageService;
+    private final MinioStorageService posterStorageService;
 
     public MovieServiceImpl(MovieMapper movieMapper,
                             MovieRepostiory movieRepository,
-                            MinioPosterStorageServiceImpl posterStorageService) {
+                            MinioStorageService posterStorageService) {
         this.movieMapper = movieMapper;
         this.movieRepository = movieRepository;
         this.posterStorageService = posterStorageService;
@@ -35,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieResponse> getAllMovies() {
-        List<MovieEntity> allMovies = movieRepository.findAll();
+        List<MovieEntity> allMovies = movieRepository.findAllByOrderByCreatedAtDesc();
         List<MovieResponse> movieResponses = new ArrayList<>();
         for (MovieEntity movieEntity : allMovies) {
             var movieResponse = movieMapper.toResponse(movieEntity);
@@ -90,7 +92,15 @@ public class MovieServiceImpl implements MovieService {
     @Transactional
     @Override
     public void deleteMovie(UUID id) {
-        movieRepository.deleteById(id);
+        MovieEntity existingMovie = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
+        try {
+            posterStorageService.delete(id.toString());
+        } catch (Exception e) {
+            log.error("Exception occurred while trying to delete movie with id: " + id, e);
+        }
+
+        movieRepository.deleteById(existingMovie.getId());
     }
 
     @Transactional
@@ -98,13 +108,11 @@ public class MovieServiceImpl implements MovieService {
     public MovieResponse addMovieWithPoster(AddMovieRequest request, MultipartFile multipartFile) {
         validateMovieRequest(request);
         MovieResponse movieResponse = addMovie(request);
-        String url = "";
+        String url = null;
         if (multipartFile != null) {
             url = posterStorageService.upload(multipartFile, movieResponse.getId().toString());
         }
-        if (url != null) {
-            movieResponse.setPoster_url(url);
-        }
+        movieResponse.setPoster_url(url);
         return movieResponse;
     }
 
@@ -112,12 +120,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieResponse updatePoster(UUID id, MultipartFile multipartFile) {
         MovieResponse movieResponse = getMovieById(id);
-        String url = "";
+        String url = null;
         if (multipartFile != null) {
             url = posterStorageService.upload(multipartFile, movieResponse.getId().toString());
-            movieResponse.setPoster_url(url);
-        }
-        if (url != null) {
             movieResponse.setPoster_url(url);
         }
         return movieResponse;

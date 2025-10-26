@@ -86,6 +86,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(FileDeleteException.class)
+    public ResponseEntity<ErrorResponse> handleFileDeleteException(FileDeleteException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                500,
+                "FILE_DELETE_ERROR",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(InvalidFileException.class)
     public ResponseEntity<ErrorResponse> handleInvalidFileException(InvalidFileException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
@@ -138,3 +148,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+
