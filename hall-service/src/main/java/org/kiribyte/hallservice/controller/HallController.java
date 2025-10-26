@@ -29,7 +29,7 @@ public class HallController {
     }
 
     @GetMapping("/{id}/seats")
-    public HallWithSeatsDto getHallWithSeats(@RequestParam Long id) {
+    public HallWithSeatsDto getHallWithSeats(@PathVariable Long id) {
         return hallService.getHallWithSeatsById(id);
     }
 

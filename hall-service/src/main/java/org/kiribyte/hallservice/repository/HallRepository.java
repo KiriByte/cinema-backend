@@ -3,6 +3,7 @@ package org.kiribyte.hallservice.repository;
 import org.kiribyte.hallservice.entity.HallEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,6 +16,7 @@ public interface HallRepository extends JpaRepository<HallEntity, Long> {
             LEFT JOIN FETCH h.seats s
             LEFT JOIN FETCH s.seatType
             WHERE h.id = :hallId
+            ORDER BY s.rowNumber, s.seatNumber
             """)
-    Optional<HallEntity> findHallWithSeatsAndTypeById(Long id);
+    Optional<HallEntity> findHallWithSeatsAndTypeById(@Param("hallId") Long id);
 }

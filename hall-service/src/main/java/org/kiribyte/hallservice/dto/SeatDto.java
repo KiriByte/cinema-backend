@@ -15,5 +15,4 @@ public class SeatDto {
     private Long rowNumber;
     private Long seatNumber;
     private Long seatTypeId;
-    private String seatType;
 }
