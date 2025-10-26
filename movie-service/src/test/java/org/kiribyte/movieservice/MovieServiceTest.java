@@ -73,7 +73,7 @@ class MovieServiceTest {
     void getAllMovies_ShouldReturnAllMoviesWithPosterUrls() {
         // Arrange
         List<MovieEntity> movieEntities = Arrays.asList(movieEntity);
-        when(movieRepository.findAll()).thenReturn(movieEntities);
+        when(movieRepository.findAllByOrderByCreatedAtDesc()).thenReturn(movieEntities);
         when(movieMapper.toResponse(movieEntity)).thenReturn(movieResponse);
         when(posterStorageService.getFileUrl(movieId.toString())).thenReturn("http://url.com/poster.jpg");
 
@@ -84,7 +84,7 @@ class MovieServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(movieResponse, result.get(0));
-        verify(movieRepository).findAll();
+        verify(movieRepository).findAllByOrderByCreatedAtDesc();
         verify(movieMapper).toResponse(movieEntity);
         verify(posterStorageService).getFileUrl(movieId.toString());
     }
@@ -173,5 +173,32 @@ class MovieServiceTest {
         verify(movieRepository, never()).existsByTitle(any());
         verify(movieMapper, never()).toEntity(any());
         verify(movieRepository, never()).save(any());
+    }
+
+    @Test
+    void deletePoster_WhenMovieExists_ShouldDeletePosterFromStorage() {
+        // Arrange
+        when(movieRepository.findById(movieId)).thenReturn(Optional.of(movieEntity));
+
+        // Act
+        movieService.deleteMovie(movieId);
+
+        // Assert
+        verify(movieRepository).findById(movieId);
+        verify(posterStorageService).delete(movieId.toString());
+    }
+
+    @Test
+    void deletePoster_WhenMovieDoesNotExist_ShouldThrowMovieNotFoundException() {
+        // Arrange
+        when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        MovieNotFoundException exception = assertThrows(MovieNotFoundException.class,
+            () -> movieService.deleteMovie(movieId));
+        
+        assertEquals("Movie not found with id: " + movieId, exception.getMessage());
+        verify(movieRepository).findById(movieId);
+        verify(posterStorageService, never()).delete(any());
     }
 }
