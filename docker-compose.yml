@@ -140,7 +140,6 @@ services:
     depends_on:
       - eureka-server
       - postgres
-      - minio
 
 volumes:
   postgres_data:
