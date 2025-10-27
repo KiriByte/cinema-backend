@@ -141,6 +141,23 @@ services:
       - eureka-server
       - postgres
 
+  # Session Service
+  session-service:
+    build:
+      context: .
+      dockerfile: session-service.Dockerfile
+    container_name: cinema-session-service
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/cinema_db
+      - SPRING_DATASOURCE_USERNAME=cinema_user
+      - SPRING_DATASOURCE_PASSWORD=cinema_password
+    networks:
+      - cinema-network
+    depends_on:
+      - eureka-server
+      - postgres
+
 volumes:
   postgres_data:
   minio_data:

@@ -1,4 +1,4 @@
-package org.kiribyte.authservice.service;
+package org.kiribyte.authservice.client;
 
 import org.kiribyte.authservice.config.FeignConfig;
 import org.kiribyte.dto.UserDto;

@@ -66,6 +66,7 @@ public class HallServiceImpl implements HallService {
 
     @Override
     public void deleteHallById(Long id) {
+        // добавить проверку на активные сессии
         List<SeatEntity> seats = seatRepository.findByHallId(id);
         seatRepository.deleteAll(seats);
         hallRepository.deleteById(id);

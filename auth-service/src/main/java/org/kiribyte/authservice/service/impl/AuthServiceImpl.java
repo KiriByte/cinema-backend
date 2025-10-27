@@ -6,7 +6,7 @@ import org.kiribyte.authservice.exception.TokenValidationException;
 import org.kiribyte.authservice.model.TokenEntity;
 import org.kiribyte.authservice.repository.TokenRepository;
 import org.kiribyte.authservice.service.TokenService;
-import org.kiribyte.authservice.service.UserClient;
+import org.kiribyte.authservice.client.UserClient;
 import org.kiribyte.authservice.util.TokenHash;
 import org.kiribyte.dto.UserLoginDto;
 import org.kiribyte.dto.UserRegisterDto;

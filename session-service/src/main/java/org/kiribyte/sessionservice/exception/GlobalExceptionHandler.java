@@ -1,4 +1,4 @@
-package org.kiribyte.authservice.exception;
+package org.kiribyte.sessionservice.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kiribyte.exception.FeignClientException;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(FeignClientException.class)
     public ResponseEntity<ErrorResponse> handleFeignClientException(FeignClientException ex) {
-        log.error(ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(
                 ex.getCode(),
                 ex.getError(),
@@ -22,24 +22,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ex.getCode()));
     }
 
-    @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<ErrorResponse> expiredTokenException(TokenExpiredException ex) {
+    @ExceptionHandler(SessionTimeConflictException.class)
+    public ResponseEntity<ErrorResponse> handleSessionTimeConflictException(SessionTimeConflictException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                403,
-                "TOKEN_EXPIRED",
+                409,
+                "SESSION TIME CONFLICT",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(TokenValidationException.class)
-    public ResponseEntity<ErrorResponse> expiredTokenException(TokenValidationException ex) {
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSessionNotFoundException(SessionNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                401,
-                "TOKEN_INVALID",
+                404,
+                "SESSION NOT FOUND",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
@@ -52,5 +52,4 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

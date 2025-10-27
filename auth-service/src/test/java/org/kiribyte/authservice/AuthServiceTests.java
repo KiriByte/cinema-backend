@@ -8,7 +8,7 @@ import org.kiribyte.authservice.dto.TokensDto;
 import org.kiribyte.authservice.model.TokenEntity;
 import org.kiribyte.authservice.repository.TokenRepository;
 import org.kiribyte.authservice.service.TokenService;
-import org.kiribyte.authservice.service.UserClient;
+import org.kiribyte.authservice.client.UserClient;
 import org.kiribyte.authservice.service.impl.AuthServiceImpl;
 import org.kiribyte.dto.UserDto;
 import org.kiribyte.dto.UserLoginDto;

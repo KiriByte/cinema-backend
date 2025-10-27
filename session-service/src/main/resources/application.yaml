@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: session-service
+  flyway:
+    enabled: true
+    locations: classpath:db/migration/sessions
+    default-schema: session_service_schema
+    schemas: session_service_schema
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cinema_db
+    username: cinema_user
+    password: cinema_password
+    driver-class-name: org.postgresql.Driver
+
+
+logging:
+  level:
+    org.kiribyte.sessionservice.scheduler: INFO
