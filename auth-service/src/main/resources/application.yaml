@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8086
 
 spring:
   application:
@@ -13,4 +13,3 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     date-format: yyyy-MM-dd HH:mm:ss
-

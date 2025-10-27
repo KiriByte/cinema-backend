@@ -1,4 +1,4 @@
-package org.kiribyte.authservice.config;
+package org.kiribyte.sessionservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,6 +8,7 @@ import org.kiribyte.exception.FeignClientException;
 import org.kiribyte.model.ErrorResponse;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 @Component
@@ -31,7 +32,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
                     errorResponse.getMessage()
             );
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return new FeignClientException(
                     500,
                     "DECODING_ERROR",

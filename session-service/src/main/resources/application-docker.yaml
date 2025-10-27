@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/cinema_db
+    username: cinema_user
+    password: cinema_password
+    driver-class-name: org.postgresql.Driver
+  jackson:
+    time-zone: UTC
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+
+logging:
+  level:
+    org.kiribyte.sessionservice.scheduler: INFO
