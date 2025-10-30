@@ -18,12 +18,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/auth/security").authenticated()
-                        .requestMatchers("/security").authenticated()
+                        .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/halls/**").permitAll()
                         .requestMatchers("/api/v1/seat-types/**").permitAll()
                         .requestMatchers("/api/v1/seats/**").permitAll()
                         .requestMatchers("/api/v1/movies/**").permitAll()
+                        .requestMatchers("/api/v1/sessions/**").permitAll()
+                        .requestMatchers("/test").permitAll()
                         .anyRequest().authenticated())
 
                 .csrf(AbstractHttpConfigurer::disable)
@@ -37,7 +38,7 @@ public class SecurityConfiguration {
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false); // Если не используете куки/авторизацию
+        configuration.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

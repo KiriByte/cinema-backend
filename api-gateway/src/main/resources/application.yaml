@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+jwt:
+  issuer: cinema-backend
+
 spring:
   application:
     name: api-gateway
@@ -21,4 +24,12 @@ spring:
               uri: lb://movie-service
               predicates:
                 - Path=/api/v1/movies/**
+            - id: session-service
+              uri: lb://session-service
+              predicates:
+                - Path=/api/v1/sessions/**
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/users/**
 
