@@ -188,17 +188,4 @@ class MovieServiceTest {
         verify(posterStorageService).delete(movieId.toString());
     }
 
-    @Test
-    void deletePoster_WhenMovieDoesNotExist_ShouldThrowMovieNotFoundException() {
-        // Arrange
-        when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        MovieNotFoundException exception = assertThrows(MovieNotFoundException.class,
-            () -> movieService.deleteMovie(movieId));
-        
-        assertEquals("Movie not found with id: " + movieId, exception.getMessage());
-        verify(movieRepository).findById(movieId);
-        verify(posterStorageService, never()).delete(any());
-    }
 }

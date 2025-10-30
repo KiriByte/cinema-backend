@@ -131,8 +131,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private void assignDefaultRole(User user) {
-        Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new RoleNotFoundException("ROLE_USER"));
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new RoleNotFoundException("USER"));
         user.addRole(userRole);
     }
 

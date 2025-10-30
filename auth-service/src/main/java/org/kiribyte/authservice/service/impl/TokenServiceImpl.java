@@ -23,7 +23,7 @@ public class TokenServiceImpl implements TokenService {
     private String secret;
     private SecretKey secretKey;
 
-    @Value("${spring.application.name}")
+    @Value("${jwt.issuer}")
     private String issuer;
 
     @Value("${jwt.access-token-expiration-minutes}")

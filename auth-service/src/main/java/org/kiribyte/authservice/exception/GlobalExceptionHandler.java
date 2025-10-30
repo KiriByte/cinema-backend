@@ -29,17 +29,17 @@ public class GlobalExceptionHandler {
                 "TOKEN_EXPIRED",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(TokenValidationException.class)
     public ResponseEntity<ErrorResponse> expiredTokenException(TokenValidationException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                401,
+                403,
                 "TOKEN_INVALID",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)
