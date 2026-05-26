@@ -22,4 +22,6 @@ public interface MovieService {
     MovieResponse addMovieWithPoster(AddMovieRequest request, MultipartFile multipartFile);
 
     MovieResponse updatePoster(UUID id, MultipartFile multipartFile);
+
+    MovieResponse addByTmdbId(Integer id);
 }

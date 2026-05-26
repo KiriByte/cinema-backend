@@ -24,6 +24,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/seats/**").permitAll()
                         .requestMatchers("/api/v1/movies/**").permitAll()
                         .requestMatchers("/api/v1/sessions/**").permitAll()
+                        .requestMatchers("/api/v1/tmdb/**").permitAll()
                         .requestMatchers("/test").permitAll()
                         .anyRequest().authenticated())
 

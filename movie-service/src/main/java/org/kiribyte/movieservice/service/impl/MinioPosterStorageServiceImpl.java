@@ -32,6 +32,7 @@ public class MinioPosterStorageServiceImpl implements MinioStorageService {
     );
 
     private final MinioClient minioClient;
+
     public MinioPosterStorageServiceImpl(MinioClient minioClient) {
         this.minioClient = minioClient;
     }
@@ -63,7 +64,31 @@ public class MinioPosterStorageServiceImpl implements MinioStorageService {
             log.info("File {} success uploaded to {}", fileName, bucketName);
             return getFileUrl(fileName);
         } catch (Exception e) {
-            log.error("Failed to upload file {} in MinIO",fileName, e);
+            log.error("Failed to upload file {} in MinIO", fileName, e);
+            throw new FileUploadException("Failed to upload file: " + fileName, e);
+        }
+    }
+
+    @Override
+    public String upload(byte[] bytes, String fileName, String contentType) {
+        if (bytes == null || bytes.length == 0) {
+            throw new InvalidFileException("File bytes are empty or null");
+        }
+        if (!ALLOWED_CONTENT_TYPES.contains(contentType)) {
+            throw new InvalidFileException("Invalid file type. Allowed types: " + ALLOWED_CONTENT_TYPES);
+        }
+        try {
+            java.io.ByteArrayInputStream inputStream = new java.io.ByteArrayInputStream(bytes);
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(fileName)
+                    .stream(inputStream, bytes.length, -1)
+                    .contentType(contentType)
+                    .build());
+            log.info("File {} success uploaded to {}", fileName, bucketName);
+            return getFileUrl(fileName);
+        } catch (Exception e) {
+            log.error("Failed to upload file {} in MinIO", fileName, e);
             throw new FileUploadException("Failed to upload file: " + fileName, e);
         }
     }
@@ -116,7 +141,7 @@ public class MinioPosterStorageServiceImpl implements MinioStorageService {
             );
         } catch (Exception e) {
             log.error("Failed generate url for file {}", fileName, e);
-            return  null;
+            return null;
         }
 
     }

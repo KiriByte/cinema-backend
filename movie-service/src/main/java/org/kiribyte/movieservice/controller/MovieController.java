@@ -53,4 +53,8 @@ public class MovieController {
         return movieService.updatePoster(id, file);
     }
 
+    @PostMapping("/tmdb/{tmdbId}")
+    public MovieResponse addMovieByTmdbId(@PathVariable Integer tmdbId) {
+        return movieService.addByTmdbId(tmdbId);
+    }
 }

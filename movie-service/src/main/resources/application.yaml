@@ -15,3 +15,6 @@ spring:
       max-file-size: 10MB
       file-size-threshold: 3MB
       resolve-lazily: false
+
+tmdb:
+  apiKey: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OThlZjUyYzFhNDU2MzI0MzBmMDc4MmE5MDdmMGMyMCIsIm5iZiI6MTc1NzUyOTcyNi45OTIsInN1YiI6IjY4YzFjNjdlYWU2YzI4ODMwZTliZDY1YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.m2-vvp7wlADpX_V4P8CJU_G62cggk_7Sj59bRHQFLgA
